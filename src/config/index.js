@@ -1,5 +1,5 @@
 const config = {
-    API_URL: 'http://localhost:2048/api',
+    API_URL: 'https://emp-backend-xzxm.onrender.com/api',
 }
 
 // http://localhost:2048
