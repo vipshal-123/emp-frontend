@@ -1,3 +1,4 @@
+import type { Employee } from '@/types/Employee'
 import axios, { handleResponse } from '../axios'
 
 export const userInfo = async () => {
@@ -13,7 +14,7 @@ export const userInfo = async () => {
     }
 }
 
-export const employeeList = async (params: { next?: string | undefined; limit?: string | undefined }) => {
+export const employeeList = async (params: { next?: string | undefined; limit?: number }) => {
     try {
         const response = await axios({
             url: '/v1/user/employees',
@@ -27,7 +28,7 @@ export const employeeList = async (params: { next?: string | undefined; limit?: 
     }
 }
 
-export const addEmployee = async (data) => {
+export const addEmployee = async (data: Omit<Employee, 'id'>) => {
     try {
         const response = await axios({
             url: '/v1/user/add-employee',
@@ -41,7 +42,7 @@ export const addEmployee = async (data) => {
     }
 }
 
-export const updateEmployee = async (data, id: string) => {
+export const updateEmployee = async (data: Employee, id: string) => {
     try {
         const response = await axios({
             url: `/v1/user/employee/${id}`,

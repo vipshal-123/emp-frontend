@@ -8,5 +8,4 @@ export interface Employee {
     state: string
     zip: string
     country: string
-    [key: string]: any
 }

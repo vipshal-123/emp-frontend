@@ -6,7 +6,7 @@ import * as Yup from 'yup'
 interface EmployeeModalProps {
     show: boolean
     onClose: () => void
-    onSave: (values: Employee) => void
+    onSave: (values: Employee | Omit<Employee, 'id'>) => void
     editingEmployee?: Employee | null
 }
 

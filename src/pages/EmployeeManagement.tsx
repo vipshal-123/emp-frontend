@@ -57,29 +57,22 @@ const EmployeeManagement = () => {
         }
     }
 
-    const handleSave = async (values: Employee) => {
+    const handleSave = async (values: Employee | Omit<Employee, 'id'>) => {
         try {
             if (!isEmpty(editingEmployee) && editingEmployee) {
-                const response = await updateEmployee(values, editingEmployee?.id)
+                const updatedEmployee: Employee = { ...values, id: editingEmployee.id } as Employee
+                const response = await updateEmployee(updatedEmployee, editingEmployee?.id)
 
                 if (response.success) {
                     setShowModal(false)
-                    setItems((prev) =>
-                        prev.map((item) =>
-                            item?.id === editingEmployee?.id
-                                ? {
-                                      ...values,
-                                  }
-                                : item,
-                        ),
-                    )
+                    setItems((prev) => prev.map((item) => (item.id === editingEmployee.id ? updatedEmployee : item)))
                     dispatch(openToast({ message: response.message, type: 'success' }))
                 } else {
                     console.log(response.message)
                     dispatch(openToast({ message: response.message, type: 'error' }))
                 }
             } else {
-                const response = await addEmployee(values)
+                const response = await addEmployee(values as Omit<Employee, 'id'>)
 
                 if (response.success) {
                     setShowModal(false)

@@ -1,6 +1,13 @@
 import axios, { handleResponse } from '../axios'
 
-export const signup = async (data) => {
+interface SignupValues {
+    companyName: string
+    name: string
+    email: string
+    phone: string
+}
+
+export const signup = async (data: SignupValues) => {
     try {
         const response = await axios({
             url: '/auth/user/signup',
@@ -14,7 +21,7 @@ export const signup = async (data) => {
     }
 }
 
-export const signupVerifyOtp = async (data) => {
+export const signupVerifyOtp = async (data: { otp: string; token: string | null }) => {
     try {
         const response = await axios({
             url: '/auth/user/verify-signup-otp',
@@ -28,7 +35,7 @@ export const signupVerifyOtp = async (data) => {
     }
 }
 
-export const resendOtp = async (data) => {
+export const resendOtp = async (data: { token: string | null }) => {
     try {
         const response = await axios({
             url: '/auth/user/resend-signup-otp',
@@ -42,7 +49,7 @@ export const resendOtp = async (data) => {
     }
 }
 
-export const createPassword = async (data) => {
+export const createPassword = async (data: { password: string }) => {
     try {
         const response = await axios({
             url: '/auth/user/create-password',
@@ -56,7 +63,7 @@ export const createPassword = async (data) => {
     }
 }
 
-export const signin = async (data) => {
+export const signin = async (data: { email: string; password: string }) => {
     try {
         const response = await axios({
             url: '/auth/user/signin',
