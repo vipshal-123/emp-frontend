@@ -1,8 +1,31 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
 import { userInfo } from '@/services/v1/user.service'
 import isEmpty from 'is-empty'
 
-export const fetchUserData = createAsyncThunk('auth/fetchUserData', async () => {
+interface AuthState {
+    isAuth: boolean
+    loading: boolean
+    userId: string
+    email: string
+}
+
+interface UserResponse {
+    id: string
+    email: string
+}
+
+interface FetchUserDataResponse extends Partial<UserResponse> {
+    isAuth: boolean
+}
+
+const initialState: AuthState = {
+    isAuth: false,
+    loading: true,
+    userId: '',
+    email: '',
+}
+
+export const fetchUserData = createAsyncThunk<FetchUserDataResponse>('auth/fetchUserData', async () => {
     try {
         const response = await userInfo()
         if (!isEmpty(response.data)) {
@@ -16,21 +39,14 @@ export const fetchUserData = createAsyncThunk('auth/fetchUserData', async () => 
     }
 })
 
-const initialState = {
-    isAuth: false,
-    loading: true,
-    userId: '',
-    email: '',
-}
-
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setupAuth: (state, { payload }) => {
-            state.isAuth = payload.isAuth
-            state.userId = payload.userId
-            state.email = payload.email
+        setupAuth: (state, action: PayloadAction<{ isAuth: boolean; userId: string; email: string }>) => {
+            state.isAuth = action.payload.isAuth
+            state.userId = action.payload.userId
+            state.email = action.payload.email
         },
         revokeAuth: (state) => {
             state.isAuth = false
@@ -45,9 +61,9 @@ const authSlice = createSlice({
             })
             .addCase(fetchUserData.fulfilled, (state, action) => {
                 state.loading = false
-                state.isAuth = !!action?.payload?.isAuth
-                state.userId = action?.payload?.id
-                state.email = action?.payload?.email
+                state.isAuth = !!action.payload?.isAuth
+                state.userId = action.payload?.id ?? ''
+                state.email = action.payload?.email ?? ''
             })
             .addCase(fetchUserData.rejected, (state) => {
                 state.loading = false

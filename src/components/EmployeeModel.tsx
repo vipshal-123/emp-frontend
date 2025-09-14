@@ -1,5 +1,14 @@
+import type { Employee } from '@/types/Employee'
 import { useFormik } from 'formik'
+import type { ChangeEvent } from 'react'
 import * as Yup from 'yup'
+
+interface EmployeeModalProps {
+    show: boolean
+    onClose: () => void
+    onSave: (values: Employee) => void
+    editingEmployee?: Employee | null
+}
 
 const employeeSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
@@ -10,11 +19,13 @@ const employeeSchema = Yup.object().shape({
     address2: Yup.string(),
     city: Yup.string().required('City is required'),
     state: Yup.string().trim().required('State is required'),
-    zip: Yup.string().required('Zip code is required'),
+    zip: Yup.string()
+        .matches(/^[1-9]+$/, 'Only numbers are allowed')
+        .required('Zip code is required'),
     country: Yup.string().required('Country is required'),
 })
 
-const EmployeeModal = ({ show, onClose, onSave, editingEmployee }) => {
+const EmployeeModal = ({ show, onClose, onSave, editingEmployee }: EmployeeModalProps) => {
     const formik = useFormik({
         initialValues: editingEmployee
             ? editingEmployee
@@ -29,7 +40,7 @@ const EmployeeModal = ({ show, onClose, onSave, editingEmployee }) => {
         enableReinitialize: true,
     })
 
-    const handleSsnChange = (e) => {
+    const handleSsnChange = (e: ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value.replace(/\D/g, '')
         if (value.length > 9) value = value.slice(0, 9)
         let formatted = ''

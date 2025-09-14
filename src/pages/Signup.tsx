@@ -6,22 +6,29 @@ import { setLocal } from '@/utils/storage'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { openToast } from '@/redux/slice/toastSlice'
+import type { AppDispatch } from '@/redux/store'
+
+interface SignupValues {
+    companyName: string
+    name: string
+    email: string
+    phone: string
+}
 
 const signUpSchema = Yup.object().shape({
     companyName: Yup.string().required('Company name is required'),
     name: Yup.string().required('Contact person is required'),
     email: Yup.string().email('Invalid email address').required('Email is required'),
-    phone: Yup.string()
-    .required('Phone number is required'),
+    phone: Yup.string().required('Phone number is required'),
 })
 
 const initialValues = { companyName: '', name: '', email: '', phone: '' }
 
 const SignUp = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = async (values: SignupValues) => {
         try {
             const response = await signup(values)
 
@@ -49,7 +56,7 @@ const SignUp = () => {
     return (
         <FormCard title='Create Employer Account' subtitle='Register as an employer to manage employees'>
             <form onSubmit={formik.handleSubmit} className='space-y-6'>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6'>
                     <div>
                         <label htmlFor='companyName' className='block text-sm font-medium text-gray-700'>
                             Company Name
@@ -60,10 +67,11 @@ const SignUp = () => {
                             {...formik.getFieldProps('companyName')}
                             className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                         />
-                        {formik.touched.companyName && formik.errors.companyName ? (
+                        {formik.touched.companyName && formik.errors.companyName && (
                             <div className='mt-1 text-sm text-red-600'>{formik.errors.companyName}</div>
-                        ) : null}
+                        )}
                     </div>
+
                     <div>
                         <label htmlFor='name' className='block text-sm font-medium text-gray-700'>
                             Contact Person
@@ -74,9 +82,10 @@ const SignUp = () => {
                             {...formik.getFieldProps('name')}
                             className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                         />
-                        {formik.touched.name && formik.errors.name ? <div className='mt-1 text-sm text-red-600'>{formik.errors.name}</div> : null}
+                        {formik.touched.name && formik.errors.name && <div className='mt-1 text-sm text-red-600'>{formik.errors.name}</div>}
                     </div>
                 </div>
+
                 <div>
                     <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
                         Work Email
@@ -87,8 +96,9 @@ const SignUp = () => {
                         {...formik.getFieldProps('email')}
                         className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                     />
-                    {formik.touched.email && formik.errors.email ? <div className='mt-1 text-sm text-red-600'>{formik.errors.email}</div> : null}
+                    {formik.touched.email && formik.errors.email && <div className='mt-1 text-sm text-red-600'>{formik.errors.email}</div>}
                 </div>
+
                 <div>
                     <label htmlFor='phone' className='block text-sm font-medium text-gray-700'>
                         Phone
@@ -100,8 +110,10 @@ const SignUp = () => {
                         {...formik.getFieldProps('phone')}
                         className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                     />
-                    {formik.touched.phone && formik.errors.phone ? <div className='mt-1 text-sm text-red-600'>{formik.errors.phone}</div> : null}
+                    {formik.touched.phone && formik.errors.phone && <div className='mt-1 text-sm text-red-600'>{formik.errors.phone}</div>}
                 </div>
+
+                {/* Submit */}
                 <div>
                     <button
                         type='submit'
@@ -112,6 +124,7 @@ const SignUp = () => {
                     </button>
                 </div>
             </form>
+
             <p className='mt-6 text-center text-sm text-gray-600'>
                 Already registered?{' '}
                 <button onClick={() => navigate('/signin')} className='font-medium text-blue-600 hover:text-blue-500'>

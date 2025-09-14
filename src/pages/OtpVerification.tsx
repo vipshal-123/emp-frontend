@@ -17,7 +17,7 @@ const OtpVerification = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = async (values: { otp: string }) => {
         try {
             const localToken = getLocal('token')
 
@@ -81,7 +81,7 @@ const OtpVerification = () => {
                     <input
                         id='otp'
                         type='text'
-                        maxLength='6'
+                        maxLength={6}
                         {...formik.getFieldProps('otp')}
                         className='block w-full text-center text-2xl tracking-[1em] px-3 py-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500'
                         placeholder='______'

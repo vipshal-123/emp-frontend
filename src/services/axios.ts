@@ -1,7 +1,7 @@
 import axios from './axiosService'
 import isEmpty from 'is-empty'
 
-export const handleResponse = (response, type) => {
+export const handleResponse = (response: any, type: string) => {
     try {
         if (type === 'success') {
             return response.data

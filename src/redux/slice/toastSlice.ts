@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 
 const initialState = {
     type: '',
@@ -9,7 +9,7 @@ const toastSlice = createSlice({
     name: 'toast',
     initialState,
     reducers: {
-        openToast: (state, action) => {
+        openToast: (state, action: PayloadAction<{ message: string; type: string }>) => {
             state.message = action.payload.message
             state.type = action.payload.type
             return state

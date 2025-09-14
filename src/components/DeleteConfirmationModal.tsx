@@ -1,4 +1,10 @@
-const DeleteConfirmationModal = ({ show, onClose, onConfirm }) => {
+interface DeleteModelProp {
+    show: boolean
+    onClose: () => void
+    onConfirm: () => void
+}
+
+const DeleteConfirmationModal = ({ show, onClose, onConfirm }: DeleteModelProp) => {
     if (!show) return null
     return (
         <div className='fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center'>

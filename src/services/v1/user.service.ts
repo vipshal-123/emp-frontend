@@ -13,7 +13,7 @@ export const userInfo = async () => {
     }
 }
 
-export const employeeList = async (params) => {
+export const employeeList = async (params: { next?: string | undefined; limit?: string | undefined }) => {
     try {
         const response = await axios({
             url: '/v1/user/employees',
@@ -41,7 +41,7 @@ export const addEmployee = async (data) => {
     }
 }
 
-export const updateEmployee = async (data, id) => {
+export const updateEmployee = async (data, id: string) => {
     try {
         const response = await axios({
             url: `/v1/user/employee/${id}`,
@@ -55,7 +55,7 @@ export const updateEmployee = async (data, id) => {
     }
 }
 
-export const deleteEmployee = async (id) => {
+export const deleteEmployee = async (id: string) => {
     try {
         const response = await axios({
             url: `/v1/user/employee/${id}`,

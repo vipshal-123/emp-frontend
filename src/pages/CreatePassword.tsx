@@ -2,6 +2,7 @@ import EyeIcon from '@/components/EyeIcon'
 import FormCard from '@/components/FormCard'
 import { fetchUserData } from '@/redux/slice/authSlice'
 import { openToast } from '@/redux/slice/toastSlice'
+import type { AppDispatch } from '@/redux/store'
 import { createPassword } from '@/services/auth/user.service'
 import { removeLocal, setLocal } from '@/utils/storage'
 import { useFormik } from 'formik'
@@ -9,6 +10,11 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
+
+interface CreatePasswordValues {
+    newPassword: string
+    confirmNewPassword: string
+}
 
 const createPasswordSchema = Yup.object().shape({
     newPassword: Yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
@@ -19,11 +25,11 @@ const createPasswordSchema = Yup.object().shape({
 
 const CreatePassword = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const [isPasswordVisible, setPasswordVisible] = useState(false)
     const [isConfirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = async (values: CreatePasswordValues) => {
         try {
             const payload = {
                 password: values.newPassword,

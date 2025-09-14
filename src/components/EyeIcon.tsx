@@ -1,4 +1,9 @@
-const EyeIcon = ({ toggle, isVisible }) => (
+interface EyeIconProp {
+    toggle: () => void
+    isVisible: boolean
+}
+
+const EyeIcon = ({ toggle, isVisible }: EyeIconProp) => (
     <button type='button' onClick={toggle} className='absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400'>
         {isVisible ? (
             <svg

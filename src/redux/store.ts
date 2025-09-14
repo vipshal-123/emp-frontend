@@ -5,10 +5,11 @@ import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 
 const persistConfig = { key: 'root', storage }
+const persistedAuthReducer = persistReducer(persistConfig, authReducer)
 
 const store = configureStore({
     reducer: {
-        auth: persistReducer(persistConfig, authReducer),
+        auth: persistedAuthReducer,
         toast: toastReducer,
     },
     middleware: (getDefaultMiddleware) =>
@@ -21,4 +22,6 @@ const store = configureStore({
 })
 
 export const persistor = persistStore(store)
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 export default store

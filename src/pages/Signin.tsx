@@ -1,10 +1,12 @@
-import EyeIcon from '@/components/EyeIcon'
+// import EyeIcon from '@/components/EyeIcon'
 import FormCard from '@/components/FormCard'
 import { fetchUserData } from '@/redux/slice/authSlice'
 import { openToast } from '@/redux/slice/toastSlice'
+import type { AppDispatch } from '@/redux/store'
 import { signin } from '@/services/auth/user.service'
 import { removeLocal, setLocal } from '@/utils/storage'
 import { useFormik } from 'formik'
+import { Eye, EyeOffIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -17,10 +19,10 @@ const signInSchema = Yup.object().shape({
 
 const SignIn = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const [isPasswordVisible, setPasswordVisible] = useState(false)
 
-    const handleSubmit = async (values) => {
+    const handleSubmit = async (values: { email: string; password: string }) => {
         try {
             const response = await signin(values)
 
@@ -60,8 +62,9 @@ const SignIn = () => {
                         {...formik.getFieldProps('email')}
                         className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
                     />
-                    {formik.touched.email && formik.errors.email ? <div className='mt-1 text-sm text-red-600'>{formik.errors.email}</div> : null}
+                    {formik.touched.email && formik.errors.email && <div className='mt-1 text-sm text-red-600'>{formik.errors.email}</div>}
                 </div>
+
                 <div>
                     <label htmlFor='password' className='block text-sm font-medium text-gray-700'>
                         Password
@@ -71,14 +74,19 @@ const SignIn = () => {
                             id='password'
                             type={isPasswordVisible ? 'text' : 'password'}
                             {...formik.getFieldProps('password')}
-                            className='block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'
+                            className='block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm pr-10'
                         />
-                        <EyeIcon toggle={() => setPasswordVisible(!isPasswordVisible)} isVisible={isPasswordVisible} />
+                        <button
+                            type='button'
+                            onClick={() => setPasswordVisible(!isPasswordVisible)}
+                            className='absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600'
+                        >
+                            {isPasswordVisible ? <Eye className='h-5 w-5' /> : <EyeOffIcon className='h-5 w-5' />}
+                        </button>
                     </div>
-                    {formik.touched.password && formik.errors.password ? (
-                        <div className='mt-1 text-sm text-red-600'>{formik.errors.password}</div>
-                    ) : null}
+                    {formik.touched.password && formik.errors.password && <div className='mt-1 text-sm text-red-600'>{formik.errors.password}</div>}
                 </div>
+
                 <div>
                     <button
                         type='submit'
@@ -89,6 +97,7 @@ const SignIn = () => {
                     </button>
                 </div>
             </form>
+
             <p className='mt-6 text-center text-sm text-gray-600'>
                 Not a member?{' '}
                 <button onClick={() => navigate('/')} className='font-medium text-blue-600 hover:text-blue-500'>
